@@ -32,3 +32,10 @@ def new(request):
         'form': form,
         'title': 'New item',
     })
+
+@login_required
+def delete(request,pk):
+    item=Item.objects.get(pk=pk, created_by=request.user)
+
+    item.delete()
+    return redirect('dashboard:index')
