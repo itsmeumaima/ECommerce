@@ -1,54 +1,177 @@
 {% extends 'core/base.html' %}
 
-{% block title %}Items{% endblock %}
+{% block title %}Browse Items - PostSync{% endblock %}
 
 {% block content %}
-    <div class="pb-6 grid grid-cols-4 gap-4 bg-gray-100">
-        <div class="col-span-1">
-            <form method="get" action="{% url 'item:items' %}">
-                <input name="query" class="w-full py-4 px-6 border rounded-xl" type="text" value="{{ query }}" placeholder="Find a watches, candles or shoes...">
-                <button class="mt-2 py-4 px-8 text-lg bg-teal-500 text-white rounded-xl">Search</button>
-            </form>
+<div class="max-w-7xl mx-auto">
+    <!-- Page Header -->
+    <div class="mb-10 py-12 px-6 bg-gradient-to-r from-teal-50 to-blue-50 rounded-2xl shadow-sm">
+        <div class="text-center">
+            <h1 class="text-4xl font-bold mb-4 bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">
+                Browse Items
+            </h1>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                Discover our collection of unique items and find exactly what you're looking for
+            </p>
+        </div>
+    </div>
 
-            <hr class="my-6">
-            <p class="font-semibold">Categories</p>
+    <!-- Search and Filter Section -->
+    <div class="bg-white rounded-2xl shadow-lg p-6 mb-10">
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <!-- Search Bar -->
+            <div class="lg:col-span-3">
+                <form method="get" action="{% url 'item:items' %}">
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-search text-gray-400"></i>
+                        </div>
+                        <input name="query" 
+                            class="block w-full pl-10 pr-3 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors duration-300" 
+                            type="text" 
+                            value="{{ query }}" 
+                            placeholder="Search for watches, candles, shoes, and more...">
+                    </div>
+                </form>
+            </div>
 
-            <ul>
-                {% for category in categories %}
-                <li class="py-2 px-2 rounded-xl{% if category.id == category_id %} bg-gray-200{% endif %}">
-                    <a href="{% url 'item:items' %}?query={{ query }}&category={{ category.id }}">{{ category.name }}</a>
-                </li>
-                {% endfor %}
-            </ul>
+            <!-- Search Button -->
+            <div>
+                <button type="submit" form="search-form" class="w-full py-4 px-6 bg-gradient-to-r from-teal-500 to-blue-500 text-white font-medium rounded-xl hover:from-teal-600 hover:to-blue-600 transition-all duration-300 shadow-md">
+                    Search
+                </button>
+            </div>
+        </div>
+    </div>
 
-            <hr class="my-6">
-            <p class="font-semibold">Clear filters</p>
+    <!-- Main Content Area -->
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <!-- Sidebar Filters -->
+        <div class="lg:col-span-1">
+            <div class="bg-white rounded-2xl shadow-lg p-6 sticky top-24">
+                <h2 class="text-xl font-bold text-gray-800 mb-6 pb-3 border-b border-gray-100">
+                    <i class="fas fa-filter mr-2 text-teal-500"></i> Filters
+                </h2>
 
-            <ul>
-                <li>
-                    <a href="{% url 'item:items' %}" class="mt-2 py-4 px-8 inline-block bg-yellow-500 text-lg rounded-xl text-white">
-                        Clear
+                <!-- Categories -->
+                <div class="mb-8">
+                    <h3 class="font-semibold text-gray-700 mb-4">Categories</h3>
+                    <ul class="space-y-2">
+                        {% for category in categories %}
+                        <li>
+                            <a href="{% url 'item:items' %}?query={{ query }}&category={{ category.id }}" 
+                                class="flex items-center justify-between py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors duration-300 {% if category.id == category_id %}bg-teal-50 text-teal-700 font-medium{% endif %}">
+                                <span>{{ category.name }}</span>
+                                {% if category.id == category_id %}
+                                    <i class="fas fa-check text-teal-500"></i>
+                                {% endif %}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <!-- Clear Filters -->
+                <div class="pt-4 border-t border-gray-100">
+                    <h3 class="font-semibold text-gray-700 mb-4">Reset</h3>
+                    <a href="{% url 'item:items' %}" 
+                        class="w-full py-3 px-4 bg-gradient-to-r from-yellow-400 to-orange-400 text-white font-medium rounded-lg hover:from-yellow-500 hover:to-orange-500 transition-all duration-300 flex items-center justify-center">
+                        <i class="fas fa-redo mr-2"></i> Clear All Filters
                     </a>
-                </li>
-            </ul>
+                </div>
+            </div>
         </div>
 
-        <div class="col-span-3">
-            <div class="grid grid-cols-3 gap-3">
-                {% for item in items %}
+        <!-- Items Grid -->
+        <div class="lg:col-span-3">
+            <!-- Results Header -->
+            <div class="flex justify-between items-center mb-6">
                 <div>
-                    <a href="{% url 'item:detail' item.id %}">
-                        <div>
-                            <img src="{{ item.image.url }}" class="rounded-t-xl">
+                    <h2 class="text-2xl font-bold text-gray-800">
+                        {% if query %}Search Results for "{{ query }}"{% else %}All Items{% endif %}
+                    </h2>
+                    <p class="text-gray-600">{{ items|length }} item{{ items|length|pluralize }} found</p>
+                </div>
+                <div>
+                    <select class="py-2 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
+                        <option>Sort by: Newest</option>
+                        <option>Sort by: Price (Low to High)</option>
+                        <option>Sort by: Price (High to Low)</option>
+                        <option>Sort by: Name (A-Z)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Items Grid -->
+            {% if items %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for item in items %}
+                <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1">
+                    <a href="{% url 'item:detail' item.id %}" class="block">
+                        <div class="relative overflow-hidden h-56">
+                            <img src="{{ item.image.url }}" alt="{{ item.name }}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                            <div class="absolute top-0 right-0 bg-teal-500 text-white px-3 py-1 m-3 rounded-md text-sm font-medium">
+                                {{ item.get_category_display }}
+                            </div>
                         </div>
-                        <div class="p-6 bg-white rounded-b-xl">
-                            <h2 class="text-2xl">{{ item.name }}</h2>
-                            <p class="text-gray-500">Price: {{ item.price }}</p>
+                        <div class="p-5">
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="text-xl font-bold text-gray-800">{{ item.name }}</h3>
+                                <span class="text-lg font-bold text-teal-600">${{ item.price }}</span>
+                            </div>
+                            <p class="text-gray-500 text-sm mb-4">{{ item.description|truncatewords:15 }}</p>
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center text-gray-400 text-sm">
+                                    <img src="{{ item.created_by.profile.image.url }}" alt="{{ item.created_by.username }}" class="w-6 h-6 rounded-full mr-2">
+                                    <span>{{ item.created_by.username }}</span>
+                                </div>
+                                <button class="text-sm text-teal-600 hover:text-teal-800 font-medium">
+                                    View Details <i class="fas fa-arrow-right ml-1"></i>
+                                </button>
+                            </div>
                         </div>
                     </a>
                 </div>
                 {% endfor %}
             </div>
+            {% else %}
+            <!-- No Results -->
+            <div class="bg-white rounded-2xl p-12 text-center shadow-sm">
+                <div class="text-gray-400 mb-6">
+                    <i class="fas fa-search text-6xl"></i>
+                </div>
+                <h3 class="text-2xl font-medium text-gray-700 mb-3">No items found</h3>
+                <p class="text-gray-500 mb-6 max-w-md mx-auto">
+                    {% if query %}We couldn't find any items matching your search. Try different keywords or browse categories.{% else %}There are no items available at the moment. Check back later!{% endif %}
+                </p>
+                <div class="flex justify-center space-x-4">
+                    <a href="{% url 'item:items' %}" class="px-6 py-3 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-colors duration-300">
+                        Clear Search
+                    </a>
+                    <a href="{% url 'item:new' %}" class="px-6 py-3 bg-white text-teal-600 border border-teal-500 rounded-lg hover:bg-teal-50 transition-colors duration-300">
+                        Add New Item
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Pagination -->
+            {% if items|length > 0 %}
+            <div class="mt-10 flex justify-center">
+                <nav class="inline-flex rounded-md shadow">
+                    <a href="#" class="py-2 px-4 bg-white border border-gray-300 rounded-l-lg text-gray-700 hover:bg-gray-50">
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+                    <a href="#" class="py-2 px-4 bg-teal-500 text-white border border-teal-500">1</a>
+                    <a href="#" class="py-2 px-4 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50">2</a>
+                    <a href="#" class="py-2 px-4 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50">3</a>
+                    <a href="#" class="py-2 px-4 bg-white border border-gray-300 rounded-r-lg text-gray-700 hover:bg-gray-50">
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                </nav>
+            </div>
+            {% endif %}
         </div>
     </div>
+</div>
 {% endblock %}

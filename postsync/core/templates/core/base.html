@@ -3,49 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PostSync - Professional content management platform">
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>{% block title %}{% endblock %}|PostSync</title>
-
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>{% block title %}Home{% endblock %} | PostSync</title>
+    <style>
+        /* Custom animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
 </head>
-<body>
-    <nav class="py-6 px-6 flex justify-between items-center border-b border-gray-200">
-        <a href="/" class="text-xl font-semibold">PostSync</a>
-        <div class="space-x-6">
-             <a href="{% url 'item:new' %}" class="text-lg font-semibold hover:text-gray-500">New item</a>
-            <a href="{% url 'item:items' %}" class="text-lg font-semibold hover:text-gray-500">Browse</a>
-          
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
+    <!-- Professional Navigation -->
+    <nav class="bg-white shadow-md py-4 px-6 flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center space-x-2">
+            <div class="w-10 h-10 bg-gradient-to-r from-teal-500 to-blue-500 rounded-lg flex items-center justify-center">
+                <i class="fas fa-sync-alt text-white"></i>
+            </div>
+            <a href="/" class="text-2xl font-bold bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">PostSync</a>
+        </div>
+        
+        <div class="hidden md:flex items-center space-x-8">
+            <a href="{% url 'item:new' %}" class="text-gray-700 hover:text-teal-600 font-medium transition-colors duration-300 flex items-center">
+                <i class="fas fa-plus-circle mr-2"></i> New Item
+            </a>
+            <a href="{% url 'item:items' %}" class="text-gray-700 hover:text-teal-600 font-medium transition-colors duration-300 flex items-center">
+                <i class="fas fa-th-large mr-2"></i> Browse
+            </a>
+            
             {% if request.user.is_authenticated %}
-                <a href="{% url 'conversation:inbox' %}" class="px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">Inbox</a>
-                <a href="{% url 'dashboard:index' %}" class="px-6 py-3 text-lg font-semibold bg-gray-500 text-white rounded-xl hover:bg-gray-700">Dashboard</a>
+                <a href="{% url 'conversation:inbox' %}" class="px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-colors duration-300 flex items-center">
+                    <i class="fas fa-envelope mr-2"></i> Inbox
+                </a>
+                <a href="{% url 'dashboard:index' %}" class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 transition-colors duration-300 flex items-center">
+                    <i class="fas fa-chart-line mr-2"></i> Dashboard
+                </a>
             {% else %}
-                <a href="{% url 'core:signup' %}" class="px-6 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">Signup</a>
-                <a href="{% url 'core:login' %}" class="px-6 py-3 text-lg font-semibold bg-gray-500 text-white rounded-xl hover:bg-gray-700">Login</a>
+                <a href="{% url 'core:signup' %}" class="px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-colors duration-300 flex items-center">
+                    <i class="fas fa-user-plus mr-2"></i> Sign Up
+                </a>
+                <a href="{% url 'core:login' %}" class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 transition-colors duration-300 flex items-center">
+                    <i class="fas fa-sign-in-alt mr-2"></i> Login
+                </a>
             {% endif %}
-
         </div>
+        
+        <!-- Mobile menu button -->
+        <button class="md:hidden text-gray-700 focus:outline-none">
+            <i class="fas fa-bars text-xl"></i>
+        </button>
     </nav>
-    <div class="px-6 py-6">
+
+    <!-- Main Content Area -->
+    <main class="flex-grow px-6 py-8 max-w-7xl mx-auto w-full animate-fade-in">
         {% block content %}
+        <!-- Content will be inserted here -->
         {% endblock %}
-    </div>
-    <footer class="py-6 px-6 flex justify-between bg-gray-800">
-        <div class="w-2/3 pr-10">
-            <h3 class="mb-5 font-semibold text-gray-400">
-                About
-            </h3>
-            <p class="text-lg text-gray-500">jdfopjdf[</p>
+    </main>
+
+    <!-- Professional Footer -->
+    <footer class="bg-gradient-to-r from-gray-800 to-gray-900 text-white py-12 px-6">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+            <!-- Company Info -->
+            <div class="col-span-1 md:col-span-2">
+                <div class="flex items-center space-x-2 mb-4">
+                    <div class="w-10 h-10 bg-gradient-to-r from-teal-400 to-blue-500 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-sync-alt text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold">PostSync</h3>
+                </div>
+                <p class="text-gray-300 mb-4 max-w-lg">
+                    Professional content synchronization platform designed to streamline your workflow and enhance productivity. 
+                    Manage, publish, and track your content seamlessly across all channels.
+                </p>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                        <i class="fab fa-twitter text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                        <i class="fab fa-linkedin text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                        <i class="fab fa-github text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                        <i class="fab fa-facebook text-xl"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Quick Links -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4 text-teal-300">Quick Links</h4>
+                <ul class="space-y-2">
+                    <li><a href="{% url 'item:items' %}" class="text-gray-300 hover:text-white transition-colors">Browse Items</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-white transition-colors">About Us</a></li>
+                    <li><a href="{% url 'core:contact' %}" class="text-gray-300 hover:text-white transition-colors">Contact</a></li>
+                    <li><a href="" class="text-gray-300 hover:text-white transition-colors">Pricing</a></li>
+                </ul>
+            </div>
+            
+            <!-- Legal -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4 text-teal-300">Legal</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Privacy Policy</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Terms of Service</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Cookie Policy</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Security</a></li>
+                </ul>
+            </div>
         </div>
-        <div class="w-1/3">
-            <h3 class="mb-5 font-semibold text-gray-400">
-                Menu
-            </h3>
-            <ul class="space-y-2">
-                <li><a href="#" class="text-lg text-teal-500 hover:text-teal-700">About</a></li>
-                <li><a href="{% url 'core:contact' %}" class="text-lg text-teal-500 hover:text-teal-700">Contact</a></li>
-                <li><a href="#" class="text-lg text-teal-500 hover:text-teal-700">Privacy Policy</a></li>
-                <li><a href="#" class="text-lg text-teal-500 hover:text-teal-700">terms of use</a></li>
-            </ul>
+        
+        <div class="max-w-7xl mx-auto mt-8 pt-8 border-t border-gray-700 text-center text-gray-400">
+            <p>&copy; {% now "Y" %} PostSync. All rights reserved.</p>
         </div>
     </footer>
 </body>
