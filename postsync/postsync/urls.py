@@ -10,6 +10,8 @@ urlpatterns = [
     path('dashboard/',include('dashboard.urls')),
     path('', include('core.urls')),
     path('inbox/',include('conversation.urls')),
+    path('cart/', include('cart.urls')),
+    path('analytics/', include('analytics.urls')),
 ]
 
 if settings.DEBUG:

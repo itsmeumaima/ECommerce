@@ -1,0 +1,38 @@
+{% extends 'core/base.html' %}
+{% block content %}
+<h2 class="text-2xl font-bold mb-4">🛒 Your Cart</h2>
+
+{% if cart.cart_items.all %}
+  <table class="min-w-full bg-white border">
+    <thead>
+      <tr class="bg-gray-100">
+        <th class="py-2 px-4 text-left">Item</th>
+        <th class="py-2 px-4 text-left">Quantity</th>
+        <th class="py-2 px-4 text-left">Price</th>
+        <th class="py-2 px-4 text-left">Subtotal</th>
+        <th class="py-2 px-4 text-left">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for cart_item in cart.cart_items.all %}
+      <tr>
+        <td class="py-2 px-4">{{ cart_item.item.name }}</td>
+        <td class="py-2 px-4">{{ cart_item.quantity }}</td>
+        <td class="py-2 px-4">{{ cart_item.item.price }}</td>
+        <td class="py-2 px-4">{{ cart_item.subtotal }}</td>
+        <td class="py-2 px-4">
+          <a href="{% url 'cart:remove_from_cart' cart_item.item.id %}" class="text-red-500 hover:underline">Remove</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="mt-4 text-right">
+    <p class="text-lg font-semibold">Total: {{ cart.total_price }}</p>
+    <a href="#" class="px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600">Proceed to Payment</a>
+  </div>
+{% else %}
+  <p class="text-gray-600">Your cart is empty.</p>
+{% endif %}
+{% endblock %}

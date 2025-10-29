@@ -21,43 +21,68 @@
 <body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
     <!-- Professional Navigation -->
     <nav class="bg-white shadow-md py-4 px-6 flex justify-between items-center sticky top-0 z-50">
-        <div class="flex items-center space-x-2">
-            <div class="w-10 h-10 bg-gradient-to-r from-teal-500 to-blue-500 rounded-lg flex items-center justify-center">
-                <i class="fas fa-sync-alt text-white"></i>
-            </div>
-            <a href="/" class="text-2xl font-bold bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">PostSync</a>
+    <div class="flex items-center space-x-2">
+        <div class="w-10 h-10 bg-gradient-to-r from-teal-500 to-blue-500 rounded-lg flex items-center justify-center">
+            <i class="fas fa-sync-alt text-white"></i>
         </div>
-        
-        <div class="hidden md:flex items-center space-x-8">
-            <a href="{% url 'item:new' %}" class="text-gray-700 hover:text-teal-600 font-medium transition-colors duration-300 flex items-center">
-                <i class="fas fa-plus-circle mr-2"></i> New Item
-            </a>
-            <a href="{% url 'item:items' %}" class="text-gray-700 hover:text-teal-600 font-medium transition-colors duration-300 flex items-center">
-                <i class="fas fa-th-large mr-2"></i> Browse
-            </a>
-            
-            {% if request.user.is_authenticated %}
-                <a href="{% url 'conversation:inbox' %}" class="px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-colors duration-300 flex items-center">
-                    <i class="fas fa-envelope mr-2"></i> Inbox
+        <a href="/" class="text-2xl font-bold bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent">PostSync</a>
+    </div>
+
+    <div class="hidden md:flex items-center space-x-8">
+        <a href="{% url 'item:items' %}" class="text-gray-700 hover:text-teal-600 font-medium transition-colors duration-300 flex items-center">
+            <i class="fas fa-th-large mr-2"></i> Browse
+        </a>
+
+        {% if request.user.is_authenticated %}
+            {% if request.user.is_staff %}
+                <!-- 🧑‍💼 Staff Links -->
+                <a href="{% url 'item:new' %}" class="text-gray-700 hover:text-teal-600 font-medium transition-colors duration-300 flex items-center">
+                    <i class="fas fa-plus-circle mr-2"></i> Add Item
+                </a>
+                <a href="{% url 'analytics:dashboard' %}" class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 transition-colors duration-300 flex items-center">
+                    <i class="fas fa-chart-line mr-2"></i> Analytics
+                </a>
+            {% else %}
+                <!-- 👤 Normal User Links -->
+                <a href="{% url 'cart:view_cart' %}" class="text-gray-700 hover:text-teal-600 font-medium transition-colors duration-300 flex items-center">
+                    <i class="fas fa-shopping-cart mr-2"></i> Add to Cart
+                </a>
+                <a href="#" class="text-gray-700 hover:text-teal-600 font-medium transition-colors duration-300 flex items-center">
+                    <i class="fas fa-credit-card mr-2"></i> Payment
                 </a>
                 <a href="{% url 'dashboard:index' %}" class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 transition-colors duration-300 flex items-center">
                     <i class="fas fa-chart-line mr-2"></i> Dashboard
                 </a>
-            {% else %}
-                <a href="{% url 'core:signup' %}" class="px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-colors duration-300 flex items-center">
-                    <i class="fas fa-user-plus mr-2"></i> Sign Up
-                </a>
-                <a href="{% url 'core:login' %}" class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 transition-colors duration-300 flex items-center">
-                    <i class="fas fa-sign-in-alt mr-2"></i> Login
-                </a>
             {% endif %}
-        </div>
-        
-        <!-- Mobile menu button -->
-        <button class="md:hidden text-gray-700 focus:outline-none">
-            <i class="fas fa-bars text-xl"></i>
-        </button>
-    </nav>
+
+            <!-- Common Links for All Authenticated Users -->
+            <a href="{% url 'conversation:inbox' %}" class="px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-colors duration-300 flex items-center">
+                <i class="fas fa-envelope mr-2"></i> Inbox
+            </a>
+            
+
+            <!-- ✅ Logout Button -->
+            <a href="{% url 'core:logout' %}" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors duration-300 flex items-center">
+                <i class="fas fa-sign-out-alt mr-2"></i> Logout
+            </a>
+
+        {% else %}
+            <!-- Not Logged In -->
+            <a href="{% url 'core:signup' %}" class="px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-colors duration-300 flex items-center">
+                <i class="fas fa-user-plus mr-2"></i> Sign Up
+            </a>
+            <a href="{% url 'core:login' %}" class="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 transition-colors duration-300 flex items-center">
+                <i class="fas fa-sign-in-alt mr-2"></i> Login
+            </a>
+        {% endif %}
+    </div>
+
+    <!-- Mobile menu button -->
+    <button class="md:hidden text-gray-700 focus:outline-none">
+        <i class="fas fa-bars text-xl"></i>
+    </button>
+</nav>
+
 
     <!-- Main Content Area -->
     <main class="flex-grow px-6 py-8 max-w-7xl mx-auto w-full animate-fade-in">
