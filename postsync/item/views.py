@@ -1,10 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render,get_object_or_404, redirect
 from django.db.models import Q
-
 from .forms import NewItemForm, EditItemForm
 from .models import Item, Category
-
 
 # Create your views here.
 def items(request):
@@ -33,7 +31,6 @@ def detail(request, pk):
         'item':item,
         'related_items':related_items
     })
-
 
 @login_required
 def new(request):

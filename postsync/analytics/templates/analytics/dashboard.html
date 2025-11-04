@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="space-y-10">
-    <h1 class="text-3xl font-bold text-gray-800 mb-6">📊 Analytics Dashboard</h1>
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Analytics Dashboard</h1>
 
     <!-- Summary Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -41,7 +41,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <!-- User Registrations -->
         <div class="p-6 bg-white shadow rounded-lg">
-            <h2 class="text-lg font-semibold mb-3 text-gray-700">📅 User Registrations (Last 7 Days)</h2>
+            <h2 class="text-lg font-semibold mb-3 text-gray-700">User Registrations (Last 7 Days)</h2>
             <img src="data:image/png;base64,{{ chart_user_registrations }}" 
                  alt="User Registrations Chart"
                  class="mx-auto w-full rounded-lg border" />
@@ -49,7 +49,7 @@
 
         <!-- Sales by Category -->
         <div class="p-6 bg-white shadow rounded-lg">
-            <h2 class="text-lg font-semibold mb-3 text-gray-700">🏷️ Sales by Category</h2>
+            <h2 class="text-lg font-semibold mb-3 text-gray-700">Sales by Category</h2>
             <img src="data:image/png;base64,{{ chart_category_sales }}" 
                  alt="Sales by Category Chart"
                  class="mx-auto w-full rounded-lg border" />
@@ -57,7 +57,7 @@
 
         <!-- Revenue Trend -->
         <div class="p-6 bg-white shadow rounded-lg">
-            <h2 class="text-lg font-semibold mb-3 text-gray-700">💰 Revenue Trend (Last 7 Days)</h2>
+            <h2 class="text-lg font-semibold mb-3 text-gray-700">Revenue Trend (Last 7 Days)</h2>
             <img src="data:image/png;base64,{{ chart_revenue_trend }}" 
                  alt="Revenue Trend Chart"
                  class="mx-auto w-full rounded-lg border" />
@@ -65,7 +65,7 @@
 
         <!-- Sold vs Unsold Pie -->
         <div class="p-6 bg-white shadow rounded-lg">
-            <h2 class="text-lg font-semibold mb-3 text-gray-700">🛍️ Sold vs Unsold Items</h2>
+            <h2 class="text-lg font-semibold mb-3 text-gray-700">Sold vs Unsold Items</h2>
             <img src="data:image/png;base64,{{ chart_sold_unsold }}" 
                  alt="Sold vs Unsold Pie"
                  class="mx-auto w-full rounded-lg border" />

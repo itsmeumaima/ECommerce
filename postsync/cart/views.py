@@ -33,8 +33,6 @@ def remove_from_cart(request, item_id):
     cart_item.delete()
     return redirect('cart:view_cart')
 
-
-
 @login_required
 def checkout(request):
     try:
@@ -59,7 +57,7 @@ def checkout(request):
             for ci in cart_items
         ]
 
-        # ✅ Create checkout session
+        #  Create checkout session
         session = stripe.checkout.Session.create(
             payment_method_types=['card'],
             line_items=line_items,
@@ -68,7 +66,7 @@ def checkout(request):
             cancel_url=request.build_absolute_uri('/cart/cancel/'),
         )
 
-        # ✅ Save Payment record with session.id instead
+        # Save Payment record with session.id instead
         Payment.objects.create(
             user=request.user,
             amount=total_amount,
@@ -106,11 +104,11 @@ def payment_success(request):
         item.save()
     cart.cart_items.all().delete()
 
-    messages.success(request, "✅ Payment successful! Thank you for your purchase.")
+    messages.success(request, "Payment successful! Thank you for your purchase.")
     return render(request, 'cart/payment_success.html', {'payment': payment})
 
 
 @login_required
 def payment_cancel(request):
-    messages.warning(request, "❌ Payment cancelled.")
+    messages.warning(request, "Payment cancelled.")
     return render(request, 'cart/payment_cancel.html')

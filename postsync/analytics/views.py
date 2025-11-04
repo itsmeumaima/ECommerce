@@ -24,7 +24,7 @@ def generate_chart(fig):
 @login_required
 @user_passes_test(lambda u: u.is_staff)
 def analytics_dashboard(request):
-    # 📊 Basic stats
+    # Basic stats
     total_users = User.objects.count()
     total_staff = User.objects.filter(is_staff=True).count()
     total_customers = total_users - total_staff
@@ -33,9 +33,7 @@ def analytics_dashboard(request):
     unsold_items = total_items - sold_items
     total_revenue = Item.objects.filter(is_sold=True).aggregate(total=Sum('price'))['total'] or 0
 
-    # =============================
-    # 1️⃣ User Registrations Chart
-    # =============================
+    # User Registrations Chart
     today = datetime.today()
     dates = [today - timedelta(days=i) for i in range(6, -1, -1)]
     date_labels = [d.strftime('%b %d') for d in dates]
@@ -49,9 +47,7 @@ def analytics_dashboard(request):
     ax1.set_ylabel('Users')
     chart_user_registrations = generate_chart(fig1)
 
-    # =============================
-    # 2️⃣ Sales by Category Chart
-    # =============================
+    # Sales by Category Chart
     category_sales = (
         Item.objects.filter(is_sold=True)
         .values('category__name')
@@ -63,7 +59,7 @@ def analytics_dashboard(request):
     if category_sales:
         categories = [c['category__name'] for c in category_sales]
         sales = [c['total_sales'] for c in category_sales]
-        ax2.bar(categories, sales, color='orange')
+        ax2.bar(categories, sales, color='blue')
         ax2.set_title('Sales by Category')
         ax2.set_xlabel('Category')
         ax2.set_ylabel('Items Sold')
@@ -72,9 +68,7 @@ def analytics_dashboard(request):
         ax2.text(0.5, 0.5, 'No sales data yet', ha='center', va='center', fontsize=12)
     chart_category_sales = generate_chart(fig2)
 
-    # =============================
-    # 3️⃣ Revenue Trend (Last 7 Days)
-    # =============================
+    # Revenue Trend (Last 7 Days)
     revenue_trend = []
     for d in dates:
         daily_revenue = (
@@ -90,9 +84,8 @@ def analytics_dashboard(request):
     ax3.set_ylabel('Revenue ($)')
     chart_revenue_trend = generate_chart(fig3)
 
-    # =============================
-    # 4️⃣ Sold vs Unsold Pie Chart
-    # =============================
+    # Sold vs Unsold Pie Chart
+    
     fig4, ax4 = plt.subplots(figsize=(4, 4))
     ax4.pie(
         [sold_items, unsold_items],
@@ -103,9 +96,8 @@ def analytics_dashboard(request):
     ax4.set_title('Sold vs Unsold Items')
     chart_sold_unsold = generate_chart(fig4)
 
-    # =============================
+   
     # Context
-    # =============================
     context = {
         'total_users': total_users,
         'total_staff': total_staff,
