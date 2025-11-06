@@ -14,7 +14,6 @@ A standout feature is its **automation system** using **Make (Integromat)** and 
 - Manage cart (update quantity, remove items)
 - Checkout with order summary
 - User authentication (sign up, login, logout)
-- Order confirmation via email
 
 ###  Admin Features
 - Add, update, and delete products
