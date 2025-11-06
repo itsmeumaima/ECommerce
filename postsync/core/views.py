@@ -5,13 +5,20 @@ from django.contrib.auth.decorators import login_required
 from .forms import SignUpForm
 
 # Create your views here.
+
+from django.db.models import Count, Q
+
 def index(request):
-    items=Item.objects.filter(is_sold=False)[0:6]
-    categories=Category.objects.all()
-    return render(request, 'core/index.html',{
-        'categories':categories,
-        'items':items
+    items = Item.objects.filter(is_sold=False)[:6]
+    categories = Category.objects.annotate(
+        unsold_count=Count('items', filter=Q(items__is_sold=False))
+    )
+
+    return render(request, 'core/index.html', {
+        'categories': categories,
+        'items': items
     })
+
 
 def contact(request):
     return render(request, 'core/contact.html')

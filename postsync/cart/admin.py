@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Cart, CartItem,Payment
+from .models import Cart, CartItem,Payment, PaymentItem
 
 
 class CartItemInline(admin.TabularInline):
@@ -19,3 +19,4 @@ class CartItemAdmin(admin.ModelAdmin):
     list_display = ('cart', 'item', 'quantity', 'subtotal')
     search_fields = ('cart__user__username', 'item__name')
 admin.site.register(Payment)
+admin.site.register(PaymentItem)

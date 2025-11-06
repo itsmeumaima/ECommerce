@@ -21,7 +21,7 @@
         <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
             <!-- Search Bar -->
             <div class="lg:col-span-3">
-                <form method="get" action="{% url 'item:items' %}">
+                <form id="search-form" method="get" action="{% url 'item:items' %}">
                     <div class="relative">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i class="fas fa-search text-gray-400"></i>
@@ -32,7 +32,13 @@
                             value="{{ query }}" 
                             placeholder="Search for watches, candles, shoes, and more...">
                     </div>
+                    <div class="mt-3">
+                        <button type="submit" class="w-full py-4 px-6 bg-gradient-to-r from-teal-500 to-blue-500 text-white font-medium rounded-xl hover:from-teal-600 hover:to-blue-600 transition-all duration-300 shadow-md">
+                            Search
+                        </button>
+                    </div>
                 </form>
+
             </div>
 
             <!-- Search Button -->
@@ -93,12 +99,19 @@
                     <p class="text-gray-600">{{ items|length }} item{{ items|length|pluralize }} found</p>
                 </div>
                 <div>
-                    <select class="py-2 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
-                        <option>Sort by: Newest</option>
-                        <option>Sort by: Price (Low to High)</option>
-                        <option>Sort by: Price (High to Low)</option>
-                        <option>Sort by: Name (A-Z)</option>
-                    </select>
+                    <form method="get" action="{% url 'item:items' %}">
+                        <input type="hidden" name="query" value="{{ query }}">
+                        <input type="hidden" name="category" value="{{ category_id }}">
+                        <select name="sort" onchange="this.form.submit()" 
+                            class="py-2 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
+                            <option value="">Sort by: Newest</option>
+                            <option value="price_low" {% if request.GET.sort == 'price_low' %}selected{% endif %}>Price (Low to High)</option>
+                            <option value="price_high" {% if request.GET.sort == 'price_high' %}selected{% endif %}>Price (High to Low)</option>
+                            <option value="name" {% if request.GET.sort == 'name' %}selected{% endif %}>Name (A–Z)</option>
+                        </select>
+                    </form>
+
+
                 </div>
             </div>
 
@@ -156,21 +169,43 @@
             {% endif %}
 
             <!-- Pagination -->
-            {% if items|length > 0 %}
-            <div class="mt-10 flex justify-center">
-                <nav class="inline-flex rounded-md shadow">
-                    <a href="#" class="py-2 px-4 bg-white border border-gray-300 rounded-l-lg text-gray-700 hover:bg-gray-50">
-                        <i class="fas fa-chevron-left"></i>
-                    </a>
-                    <a href="#" class="py-2 px-4 bg-teal-500 text-white border border-teal-500">1</a>
-                    <a href="#" class="py-2 px-4 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50">2</a>
-                    <a href="#" class="py-2 px-4 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50">3</a>
-                    <a href="#" class="py-2 px-4 bg-white border border-gray-300 rounded-r-lg text-gray-700 hover:bg-gray-50">
-                        <i class="fas fa-chevron-right"></i>
-                    </a>
-                </nav>
-            </div>
-            {% endif %}
+            {% if page_obj.paginator.num_pages > 1 %}
+                <div class="mt-10 flex justify-center">
+                    <nav class="inline-flex rounded-md shadow">
+                        {% if page_obj.has_previous %}
+                        <a href="?page={{ page_obj.previous_page_number }}&query={{ query }}&category={{ category_id }}&sort={{ sort }}"
+                        class="py-2 px-4 bg-white border border-gray-300 rounded-l-lg text-gray-700 hover:bg-gray-50">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                        {% else %}
+                        <span class="py-2 px-4 bg-gray-100 border border-gray-300 rounded-l-lg text-gray-400">
+                            <i class="fas fa-chevron-left"></i>
+                        </span>
+                        {% endif %}
+
+                        {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                        <span class="py-2 px-4 bg-teal-500 text-white border border-teal-500">{{ num }}</span>
+                        {% else %}
+                        <a href="?page={{ num }}&query={{ query }}&category={{ category_id }}&sort={{ sort }}"
+                        class="py-2 px-4 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50">{{ num }}</a>
+                        {% endif %}
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}&query={{ query }}&category={{ category_id }}&sort={{ sort }}"
+                        class="py-2 px-4 bg-white border border-gray-300 rounded-r-lg text-gray-700 hover:bg-gray-50">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                        {% else %}
+                        <span class="py-2 px-4 bg-gray-100 border border-gray-300 rounded-r-lg text-gray-400">
+                            <i class="fas fa-chevron-right"></i>
+                        </span>
+                        {% endif %}
+                    </nav>
+                </div>
+                {% endif %}
+
         </div>
     </div>
 </div>

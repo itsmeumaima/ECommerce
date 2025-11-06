@@ -5,24 +5,52 @@ from .forms import NewItemForm, EditItemForm
 from .models import Item, Category
 
 # Create your views here.
-def items(request):
-    query=request.GET.get('query','')
-    items=Item.objects.filter(is_sold=False)
-    categories=Category.objects.all()
-    category_id = request.GET.get('category',0)
-    
-    if category_id:
-        items=items.filter(category_id=category_id)
-    if query:
-        items=items.filter(Q(name__icontains=query) | Q(description__icontains=query))
-    
-    return render(request, 'item/items.html',{
-        'items':items,
-        'query':query,
-        'categories':categories,
-        'category_id':int(category_id),
+from django.shortcuts import render
+from django.core.paginator import Paginator
+from .models import Item, Category
 
+def items(request):
+    query = request.GET.get('query', '')
+    category_id = request.GET.get('category')
+    sort = request.GET.get('sort')
+    page = request.GET.get('page', 1)  # get current page
+
+    items = Item.objects.all()
+
+    # Search
+    if query:
+        items = items.filter(name__icontains=query)
+
+    # Category filter
+    if category_id and category_id.isdigit():
+        items = items.filter(category_id=int(category_id))
+
+    # Sorting logic
+    if sort == 'price_low':
+        items = items.order_by('price')
+    elif sort == 'price_high':
+        items = items.order_by('-price')
+    elif sort == 'name':
+        items = items.order_by('name')
+    else:
+        items = items.order_by('-created_at')
+
+    # Pagination
+    paginator = Paginator(items, 6)  # show 6 items per page
+    page_obj = paginator.get_page(page)
+
+    categories = Category.objects.all()
+
+    return render(request, 'item/items.html', {
+        'items': page_obj,  # paginated items
+        'query': query,
+        'categories': categories,
+        'category_id': category_id,
+        'sort': sort,
+        'page_obj': page_obj,
     })
+
+
 
 def detail(request, pk):
     item=get_object_or_404(Item, pk=pk)
