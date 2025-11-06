@@ -33,6 +33,18 @@ LOGOUT_REDIRECT_URL = '/'
 STRIPE_PUBLIC_KEY = "pk_test_51SNos70YfxqQT3X3YuqSMmxyDUgp5Uaua3Gv1VmOknE0U9sY1Ks4pm9XxX8Xhl6rg7WChPcMhKK9lxRw4KJwK26V00ZottGLJI"
 STRIPE_SECRET_KEY = "sk_test_51SNos70YfxqQT3X3ICs6Tsj6m7KRgXEqJEddS2qXaCYk9N33bwGjgNFBnj0cAHwY4qLLYz6P1k9WlkaDxW2DdPsq00YNgXFGyd"
 
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
+
+cloudinary.config(
+    cloud_name="dv6pddv1p",
+    api_key="832796637925528",
+    api_secret="PiHxpmQuW32bKtEBKSYo4MmP_ss",
+    secure=True
+)
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 # Application definition
 
 INSTALLED_APPS = [
@@ -47,6 +59,8 @@ INSTALLED_APPS = [
     'dashboard',
     'cart',
     'analytics',
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 MIDDLEWARE = [
