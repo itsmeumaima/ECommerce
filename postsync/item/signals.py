@@ -14,8 +14,9 @@ def send_to_make(sender, instance, created, **kwargs):
             "price": instance.price,
             "image_url": instance.image.url if instance.image else "",
         }
+        print(f"Data uploaded to Cloudinary")
         try:
             requests.post(MAKE_WEBHOOK_URL, json=data)
-            print(f"✅ Sent '{instance.name}' to Make webhook")
+            print(f"Sent '{instance.name}' to Make webhook")
         except Exception as e:
-            print(f"⚠️ Failed to send to Make: {e}")
+            print(f"Failed to send to Make: {e}")
